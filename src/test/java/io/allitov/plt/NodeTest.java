@@ -1,0 +1,39 @@
+package io.allitov.plt;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+
+class NodeTest {
+
+    @Test
+    void storesImmutableNodeParts() {
+        List<Node> children = new ArrayList<>();
+        children.add(new Node("F", List.of()));
+        Node node = new Node("T", children);
+
+        children.clear();
+
+        assertThat(node.label()).isEqualTo("T");
+        assertThat(node.children()).containsExactly(new Node("F", List.of()));
+    }
+
+    @Test
+    void createsTerminalFromToken() {
+        Node node = Node.terminal(new Token(TokenType.NUMBER, "42", 0));
+
+        assertThat(node.label()).isEqualTo("number '42'");
+        assertThat(node.children()).isEmpty();
+    }
+
+    @Test
+    void rejectsInvalidNodeParts() {
+        assertThatIllegalArgumentException().isThrownBy(() -> new Node(" ", List.of()))
+                .withMessage("Метка узла не должна быть пустой");
+        assertThatIllegalArgumentException().isThrownBy(() -> new Node("T", null))
+                .withMessage("Список дочерних узлов не должен быть null");
+    }
+}
