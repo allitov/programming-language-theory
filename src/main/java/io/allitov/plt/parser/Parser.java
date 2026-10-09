@@ -121,9 +121,8 @@ public class Parser {
 
     private String tokenExpectation(TokenType type) {
         return switch (type) {
-            case PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PAREN, RIGHT_PAREN -> "'" + type.displayName() + "'";
-            case EOF -> type.displayName();
-            case NUMBER, ID -> type.displayName();
+            case PLUS, MINUS, MULTIPLY, DIVIDE, LEFT_PAREN, RIGHT_PAREN -> "'%s'".formatted(type.displayName());
+            case EOF, NUMBER, ID -> type.displayName();
         };
     }
 }
