@@ -13,7 +13,7 @@ public class Main {
             return;
         }
 
-        System.out.println("Введите арифметическое выражение (exit — выход):");
+        System.out.println("Enter an arithmetic expression (exit to quit):");
         try (BufferedReader input = new BufferedReader(
                 new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
             String line;
@@ -27,14 +27,14 @@ public class Main {
                 }
             }
         } catch (IOException exception) {
-            System.out.println("Ошибка чтения ввода: " + exception.getMessage());
+            System.out.println("Input reading error: " + exception.getMessage());
         }
     }
 
     static String analyze(String input) {
         try {
             Node tree = new Parser(new Lexer(input).tokenize()).parse();
-            return "Выражение корректно.\n" + TreePrinter.render(tree);
+            return "Expression is valid.\n" + TreePrinter.render(tree);
         } catch (LexicalException | SyntaxException exception) {
             return exception.getMessage();
         }

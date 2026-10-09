@@ -33,7 +33,7 @@ class ParserTest {
     void reportsMissingPrimaryWithPosition() {
         assertThatThrownBy(() -> new Parser(new Lexer("5 + + 3").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
-                    assertThat(exception).hasMessage("Ошибка в позиции 4. Ожидалось: number, id или '('");
+                    assertThat(exception).hasMessage("Error at position 4. Expected: number, id or '('");
                     assertThat(exception.position()).isEqualTo(4);
                 });
     }
@@ -42,7 +42,7 @@ class ParserTest {
     void reportsMissingClosingParenthesisWithPosition() {
         assertThatThrownBy(() -> new Parser(new Lexer("(7 * 2").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
-                    assertThat(exception).hasMessage("Ошибка в позиции 6. Ожидалось: ')'");
+                    assertThat(exception).hasMessage("Error at position 6. Expected: ')'");
                     assertThat(exception.position()).isEqualTo(6);
                 });
     }
@@ -51,7 +51,7 @@ class ParserTest {
     void reportsTrailingInput() {
         assertThatThrownBy(() -> new Parser(new Lexer("2 3").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
-                    assertThat(exception).hasMessage("Ошибка в позиции 2. Ожидалось: конец ввода");
+                    assertThat(exception).hasMessage("Error at position 2. Expected: end of input");
                     assertThat(exception.position()).isEqualTo(2);
                 });
     }
@@ -60,7 +60,7 @@ class ParserTest {
     void reportsEmptyInput() {
         assertThatThrownBy(() -> new Parser(new Lexer("  ").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
-                    assertThat(exception).hasMessage("Ошибка в позиции 2. Ожидалось: number, id или '('");
+                    assertThat(exception).hasMessage("Error at position 2. Expected: number, id or '('");
                     assertThat(exception.position()).isEqualTo(2);
                 });
     }
@@ -68,10 +68,10 @@ class ParserTest {
     @Test
     void rejectsInvalidParserArguments() {
         assertThatIllegalArgumentException().isThrownBy(() -> new Parser(null))
-                .withMessage("Список токенов не должен быть null");
+                .withMessage("Token list must not be null");
         assertThatThrownBy(new Parser(List.of())::parse)
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
-                    assertThat(exception).hasMessage("Ошибка в позиции 0. Ожидалось: number, id или '('");
+                    assertThat(exception).hasMessage("Error at position 0. Expected: number, id or '('");
                     assertThat(exception.position()).isEqualTo(0);
                 });
     }

@@ -10,7 +10,7 @@ class MainTest {
     void analyzesValidExpressionWithParseTree() {
         String result = Main.analyze("2 + 3 * 4");
 
-        assertThat(result).startsWith("Выражение корректно.\nS\n");
+        assertThat(result).startsWith("Expression is valid.\nS\n");
         assertThat(result).contains("E' (ε)");
         assertThat(result).contains("number '3'");
     }
@@ -19,25 +19,25 @@ class MainTest {
     void analyzesValidParenthesizedExpression() {
         String result = Main.analyze("a * (b - 10)");
 
-        assertThat(result).startsWith("Выражение корректно.\nS\n");
+        assertThat(result).startsWith("Expression is valid.\nS\n");
         assertThat(result).contains("id 'a'");
     }
 
     @Test
     void returnsExpectedTokenError() {
         assertThat(Main.analyze("5 + + 3"))
-                .isEqualTo("Ошибка в позиции 4. Ожидалось: number, id или '('");
+                .isEqualTo("Error at position 4. Expected: number, id or '('");
     }
 
     @Test
     void returnsMissingParenthesisError() {
         assertThat(Main.analyze("(7 * 2"))
-                .isEqualTo("Ошибка в позиции 6. Ожидалось: ')'");
+                .isEqualTo("Error at position 6. Expected: ')'");
     }
 
     @Test
     void returnsLexicalError() {
         assertThat(Main.analyze("1 @ 2"))
-                .isEqualTo("Ошибка в позиции 2: недопустимый символ '@'");
+                .isEqualTo("Error at position 2: invalid character '@'");
     }
 }

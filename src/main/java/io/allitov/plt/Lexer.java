@@ -23,7 +23,7 @@ public class Lexer {
 
     public Lexer(String input) {
         if (input == null) {
-            throw new IllegalArgumentException("Входная строка не должна быть null");
+            throw new IllegalArgumentException("Input string must not be null");
         }
         this.input = input;
     }
@@ -36,7 +36,7 @@ public class Lexer {
             matcher.region(position, input.length());
             if (!matcher.lookingAt()) {
                 throw new LexicalException(
-                        "Ошибка в позиции %d: недопустимый символ '%s'".formatted(position, input.charAt(position)),
+                        "Error at position %d: invalid character '%s'".formatted(position, input.charAt(position)),
                         position);
             }
 
@@ -76,6 +76,6 @@ public class Lexer {
         if (matcher.group("rightParen") != null) {
             return TokenType.RIGHT_PAREN;
         }
-        throw new LexicalException("Не удалось определить тип токена", matcher.start());
+        throw new LexicalException("Failed to determine token type", matcher.start());
     }
 }

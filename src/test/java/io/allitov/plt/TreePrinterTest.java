@@ -30,6 +30,6 @@ class TreePrinterTest {
     @Test
     void rejectsNullRoot() {
         assertThatIllegalArgumentException().isThrownBy(() -> TreePrinter.render(null))
-                .withMessage("Корень дерева не должен быть null");
+                .withMessage("Tree root must not be null");
     }
 }

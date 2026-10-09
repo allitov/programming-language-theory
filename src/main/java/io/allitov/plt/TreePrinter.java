@@ -7,7 +7,7 @@ public final class TreePrinter {
 
     public static String render(Node root) {
         if (root == null) {
-            throw new IllegalArgumentException("Корень дерева не должен быть null");
+            throw new IllegalArgumentException("Tree root must not be null");
         }
 
         StringBuilder output = new StringBuilder();

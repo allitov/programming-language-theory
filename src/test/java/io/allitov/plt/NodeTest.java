@@ -32,8 +32,8 @@ class NodeTest {
     @Test
     void rejectsInvalidNodeParts() {
         assertThatIllegalArgumentException().isThrownBy(() -> new Node(" ", List.of()))
-                .withMessage("Метка узла не должна быть пустой");
+                .withMessage("Node label must not be blank");
         assertThatIllegalArgumentException().isThrownBy(() -> new Node("T", null))
-                .withMessage("Список дочерних узлов не должен быть null");
+                .withMessage("Child node list must not be null");
     }
 }

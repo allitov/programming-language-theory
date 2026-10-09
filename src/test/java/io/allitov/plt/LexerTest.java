@@ -43,7 +43,7 @@ class LexerTest {
     void reportsInvalidCharacterPosition() {
         assertThatThrownBy(() -> new Lexer("1 @ 2").tokenize())
                 .isInstanceOfSatisfying(LexicalException.class, exception -> {
-                    assertThat(exception).hasMessage("Ошибка в позиции 2: недопустимый символ '@'");
+                    assertThat(exception).hasMessage("Error at position 2: invalid character '@'");
                     assertThat(exception.position()).isEqualTo(2);
                 });
     }
@@ -51,6 +51,6 @@ class LexerTest {
     @Test
     void rejectsNullInput() {
         assertThatIllegalArgumentException().isThrownBy(() -> new Lexer(null))
-                .withMessage("Входная строка не должна быть null");
+                .withMessage("Input string must not be null");
     }
 }

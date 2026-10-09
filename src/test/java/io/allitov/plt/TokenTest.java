@@ -19,12 +19,12 @@ class TokenTest {
     @Test
     void rejectsInvalidTokenParts() {
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(null, "42", 0))
-                .withMessage("Тип токена не должен быть null");
+                .withMessage("Token type must not be null");
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(TokenType.NUMBER, null, 0))
-                .withMessage("Значение токена не должно быть пустым");
+                .withMessage("Token value must not be empty");
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(TokenType.NUMBER, "", 0))
-                .withMessage("Значение токена не должно быть пустым");
+                .withMessage("Token value must not be empty");
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(TokenType.NUMBER, "42", -1))
-                .withMessage("Позиция токена должна быть неотрицательной");
+                .withMessage("Token position must be non-negative");
     }
 }

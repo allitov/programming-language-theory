@@ -4,21 +4,21 @@ import java.util.List;
 
 public class Parser {
 
-    private static final String PRIMARY_EXPECTED = "number, id или '('";
+    private static final String PRIMARY_EXPECTED = "number, id or '('";
 
     private final List<Token> tokens;
     private int position;
 
     public Parser(List<Token> tokens) {
         if (tokens == null) {
-            throw new IllegalArgumentException("Список токенов не должен быть null");
+            throw new IllegalArgumentException("Token list must not be null");
         }
         this.tokens = List.copyOf(tokens);
     }
 
     public Node parse() {
         if (tokens.isEmpty()) {
-            throw new SyntaxException("Ошибка в позиции 0. Ожидалось: " + PRIMARY_EXPECTED, 0);
+            throw new SyntaxException("Error at position 0. Expected: " + PRIMARY_EXPECTED, 0);
         }
 
         Node result = parseS();
@@ -110,7 +110,7 @@ public class Parser {
         int errorPosition = position < tokens.size()
                 ? tokens.get(position).position()
                 : tokens.isEmpty() ? 0 : tokens.getLast().position();
-        String message = "Ошибка в позиции %d. Ожидалось: %s".formatted(errorPosition, expected);
+        String message = "Error at position %d. Expected: %s".formatted(errorPosition, expected);
         return new SyntaxException(message, errorPosition);
     }
 

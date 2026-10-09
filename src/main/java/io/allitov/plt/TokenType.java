@@ -9,7 +9,7 @@ public enum TokenType {
     DIVIDE("/"),
     LEFT_PAREN("("),
     RIGHT_PAREN(")"),
-    EOF("конец ввода");
+    EOF("end of input");
 
     private final String displayName;
 
