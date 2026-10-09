@@ -5,6 +5,7 @@ import io.allitov.plt.exception.SyntaxException;
 import io.allitov.plt.token.Token;
 import io.allitov.plt.token.TokenType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
@@ -23,22 +24,45 @@ public class Parser {
 
     public Node parse() {
         if (tokens.isEmpty()) {
-            throw new SyntaxException("Error at position 0. Expected: " + PRIMARY_EXPECTED, 0);
+            throw new SyntaxException(
+                    "Error at position 0. Expected: " + PRIMARY_EXPECTED,
+                    0,
+                    new Node("S", List.of(new Node("error", List.of()))));
         }
 
-        Node result = parseS();
-        match(TokenType.EOF);
-        return result;
+        Node result = null;
+        try {
+            result = parseS();
+            match(TokenType.EOF);
+            return result;
+        } catch (SyntaxException exception) {
+            if (result != null) {
+                throw exception.withPartialTree(result);
+            }
+            throw exception;
+        }
     }
 
     Node parseS() {
-        return new Node("S", List.of(parseE()));
+        Node expression = null;
+        try {
+            expression = parseE();
+            return new Node("S", List.of(expression));
+        } catch (SyntaxException exception) {
+            throw raisePartial(exception, "S", new Node[]{expression});
+        }
     }
 
     Node parseE() {
-        Node term = parseT();
-        Node expressionPrime = parseEPrime();
-        return new Node("E", List.of(term, expressionPrime));
+        Node term = null;
+        Node expressionPrime = null;
+        try {
+            term = parseT();
+            expressionPrime = parseEPrime();
+            return new Node("E", List.of(term, expressionPrime));
+        } catch (SyntaxException exception) {
+            throw raisePartial(exception, "E", new Node[]{term, expressionPrime});
+        }
     }
 
     Node parseEPrime() {
@@ -47,17 +71,30 @@ public class Parser {
             return new Node("E' (ε)", List.of());
         }
 
-        Node operator = Node.terminal(currentToken());
-        match(current);
-        Node term = parseT();
-        Node tail = parseEPrime();
-        return new Node("E'", List.of(operator, term, tail));
+        Node operator = null;
+        Node term = null;
+        Node tail = null;
+        try {
+            operator = Node.terminal(currentToken());
+            match(current);
+            term = parseT();
+            tail = parseEPrime();
+            return new Node("E'", List.of(operator, term, tail));
+        } catch (SyntaxException exception) {
+            throw raisePartial(exception, "E'", new Node[]{operator, term, tail});
+        }
     }
 
     Node parseT() {
-        Node factor = parseF();
-        Node termPrime = parseTPrime();
-        return new Node("T", List.of(factor, termPrime));
+        Node factor = null;
+        Node termPrime = null;
+        try {
+            factor = parseF();
+            termPrime = parseTPrime();
+            return new Node("T", List.of(factor, termPrime));
+        } catch (SyntaxException exception) {
+            throw raisePartial(exception, "T", new Node[]{factor, termPrime});
+        }
     }
 
     Node parseTPrime() {
@@ -66,11 +103,18 @@ public class Parser {
             return new Node("T' (ε)", List.of());
         }
 
-        Node operator = Node.terminal(currentToken());
-        match(current);
-        Node factor = parseF();
-        Node tail = parseTPrime();
-        return new Node("T'", List.of(operator, factor, tail));
+        Node operator = null;
+        Node factor = null;
+        Node tail = null;
+        try {
+            operator = Node.terminal(currentToken());
+            match(current);
+            factor = parseF();
+            tail = parseTPrime();
+            return new Node("T'", List.of(operator, factor, tail));
+        } catch (SyntaxException exception) {
+            throw raisePartial(exception, "T'", new Node[]{operator, factor, tail});
+        }
     }
 
     Node parseF() {
@@ -81,13 +125,20 @@ public class Parser {
         if (current.type() == TokenType.LEFT_PAREN) {
             Node leftParen = Node.terminal(current);
             match(TokenType.LEFT_PAREN);
-            Node expression = parseS();
-            Node rightParen = Node.terminal(currentToken());
-            match(TokenType.RIGHT_PAREN);
-            return new Node("F", List.of(leftParen, expression, rightParen));
+            Node expression = null;
+            Node rightParen = null;
+            try {
+                expression = parseS();
+                rightParen = Node.terminal(currentToken());
+                match(TokenType.RIGHT_PAREN);
+                return new Node("F", List.of(leftParen, expression, rightParen));
+            } catch (SyntaxException exception) {
+                throw raisePartial(exception, "F", new Node[]{leftParen, expression, rightParen});
+            }
         }
 
-        throw syntaxException(PRIMARY_EXPECTED);
+        throw syntaxException(PRIMARY_EXPECTED)
+                .withPartialTree(new Node("F", List.of(new Node("error", List.of()))));
     }
 
     private void match(TokenType expected) {
@@ -117,6 +168,24 @@ public class Parser {
                 : tokens.isEmpty() ? 0 : tokens.getLast().position();
         String message = "Error at position %d. Expected: %s".formatted(errorPosition, expected);
         return new SyntaxException(message, errorPosition);
+    }
+
+    private SyntaxException raisePartial(
+            SyntaxException exception, String label, Node[] parsedChildren) {
+        List<Node> children = new ArrayList<>();
+        boolean failureAdded = false;
+        for (Node child : parsedChildren) {
+            if (child != null) {
+                children.add(child);
+            } else if (!failureAdded) {
+                children.add(exception.partialTree());
+                failureAdded = true;
+            } else {
+                break;
+            }
+        }
+
+        return exception.withPartialTree(new Node(label, children));
     }
 
     private String tokenExpectation(TokenType type) {

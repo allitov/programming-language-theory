@@ -44,8 +44,10 @@ public class Main {
         try {
             Node tree = new Parser(new Lexer(input).tokenize()).parse();
             return "Expression is valid.\n" + TreePrinter.render(tree);
-        } catch (LexicalException | SyntaxException exception) {
+        } catch (LexicalException exception) {
             return exception.getMessage();
+        } catch (SyntaxException exception) {
+            return TreePrinter.render(exception.partialTree()) + exception.getMessage();
         }
     }
 }
