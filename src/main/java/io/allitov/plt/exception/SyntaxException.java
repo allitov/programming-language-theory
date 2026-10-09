@@ -1,4 +1,4 @@
-package io.allitov.plt;
+package io.allitov.plt.exception;
 
 public class SyntaxException extends RuntimeException {
 

@@ -1,4 +1,8 @@
-package io.allitov.plt;
+package io.allitov.plt.lexer;
+
+import io.allitov.plt.exception.LexicalException;
+import io.allitov.plt.token.Token;
+import io.allitov.plt.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;

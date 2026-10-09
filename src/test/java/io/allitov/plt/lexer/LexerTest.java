@@ -1,10 +1,14 @@
-package io.allitov.plt;
+package io.allitov.plt.lexer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+
+import io.allitov.plt.exception.LexicalException;
+import io.allitov.plt.token.Token;
+import io.allitov.plt.token.TokenType;
 import org.junit.jupiter.api.Test;
 
 class LexerTest {

@@ -1,4 +1,9 @@
-package io.allitov.plt;
+package io.allitov.plt.parser;
+
+import io.allitov.plt.tree.Node;
+import io.allitov.plt.exception.SyntaxException;
+import io.allitov.plt.token.Token;
+import io.allitov.plt.token.TokenType;
 
 import java.util.List;
 

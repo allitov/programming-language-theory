@@ -1,4 +1,6 @@
-package io.allitov.plt;
+package io.allitov.plt.tree;
+
+import io.allitov.plt.token.Token;
 
 import java.util.List;
 

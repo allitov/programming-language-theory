@@ -1,9 +1,10 @@
-package io.allitov.plt;
+package io.allitov.plt.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 class TreePrinterTest {

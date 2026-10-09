@@ -1,10 +1,13 @@
-package io.allitov.plt;
+package io.allitov.plt.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.allitov.plt.token.Token;
+import io.allitov.plt.token.TokenType;
 import org.junit.jupiter.api.Test;
 
 class NodeTest {

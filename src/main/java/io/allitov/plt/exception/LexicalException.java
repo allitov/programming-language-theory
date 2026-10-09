@@ -1,4 +1,4 @@
-package io.allitov.plt;
+package io.allitov.plt.exception;
 
 public class LexicalException extends RuntimeException {
 

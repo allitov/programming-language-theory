@@ -1,4 +1,4 @@
-package io.allitov.plt;
+package io.allitov.plt.token;
 
 public enum TokenType {
     NUMBER("number"),

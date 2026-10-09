@@ -1,4 +1,4 @@
-package io.allitov.plt;
+package io.allitov.plt.token;
 
 public record Token(TokenType type, String value, int position) {
 

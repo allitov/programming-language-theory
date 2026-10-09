@@ -1,4 +1,4 @@
-package io.allitov.plt;
+package io.allitov.plt.token;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
