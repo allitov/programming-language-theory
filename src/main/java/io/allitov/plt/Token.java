@@ -6,7 +6,7 @@ public record Token(TokenType type, String value, int position) {
         if (type == null) {
             throw new IllegalArgumentException("Тип токена не должен быть null");
         }
-        if (value == null || value.isEmpty()) {
+        if (value == null || (value.isEmpty() && type != TokenType.EOF)) {
             throw new IllegalArgumentException("Значение токена не должно быть пустым");
         }
         if (position < 0) {

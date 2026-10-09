@@ -20,6 +20,8 @@ class TokenTest {
     void rejectsInvalidTokenParts() {
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(null, "42", 0))
                 .withMessage("Тип токена не должен быть null");
+        assertThatIllegalArgumentException().isThrownBy(() -> new Token(TokenType.NUMBER, null, 0))
+                .withMessage("Значение токена не должно быть пустым");
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(TokenType.NUMBER, "", 0))
                 .withMessage("Значение токена не должно быть пустым");
         assertThatIllegalArgumentException().isThrownBy(() -> new Token(TokenType.NUMBER, "42", -1))
