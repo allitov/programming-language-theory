@@ -15,10 +15,6 @@ public final class TreePrinter {
         return output.toString();
     }
 
-    public static void print(Node root) {
-        System.out.print(render(root));
-    }
-
     private static void render(Node node, String prefix, boolean isLast, boolean isRoot, StringBuilder output) {
         if (isRoot) {
             output.append(node.label()).append('\n');

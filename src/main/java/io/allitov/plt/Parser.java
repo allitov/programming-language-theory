@@ -1,13 +1,10 @@
 package io.allitov.plt;
 
 import java.util.List;
-import java.util.Set;
 
 public class Parser {
 
     private static final String PRIMARY_EXPECTED = "number, id или '('";
-    private static final Set<TokenType> PRIMARY_TYPES = Set.of(
-            TokenType.NUMBER, TokenType.ID, TokenType.LEFT_PAREN);
 
     private final List<Token> tokens;
     private int position;

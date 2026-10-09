@@ -9,9 +9,7 @@ public class Main {
 
     static void main(String[] args) {
         if (args.length > 0) {
-            for (String expression : args) {
-                System.out.println(analyze(expression));
-            }
+            System.out.println(analyze(String.join(" ", args)));
             return;
         }
 
