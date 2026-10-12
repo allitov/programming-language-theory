@@ -48,6 +48,15 @@ class ParserTest {
     }
 
     @Test
+    void rejectsRepeatedUnarySigns() {
+        List<String> expressions = List.of("--2", "++2", "-+2", "+-2");
+
+        assertThat(expressions).allSatisfy(expression -> assertThatThrownBy(
+                        () -> new Parser(new Lexer(expression).tokenize()).parse())
+                .isInstanceOf(SyntaxException.class));
+    }
+
+    @Test
     void reportsMissingOperandAfterBinaryOperatorWithPosition() {
         assertThatThrownBy(() -> new Parser(new Lexer("5 + +").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {

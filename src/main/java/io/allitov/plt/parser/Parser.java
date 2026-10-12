@@ -124,12 +124,18 @@ public class Parser {
             Node operand = null;
             try {
                 match(current.type());
-                operand = parseF();
+                operand = parseUnsignedFactor();
                 return new Node("F", List.of(sign, operand));
             } catch (SyntaxException exception) {
                 throw raisePartial(exception, "F", new Node[]{sign, operand});
             }
         }
+
+        return parseUnsignedFactor();
+    }
+
+    private Node parseUnsignedFactor() {
+        Token current = currentToken();
         if (current.type() == TokenType.NUMBER || current.type() == TokenType.ID) {
             return consumeTerminal();
         }

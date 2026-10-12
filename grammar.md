@@ -3,5 +3,5 @@ E -> TE'
 E' -> +TE' | -TE' | пусто
 T -> FT'
 T' -> *FT' | /FT' | пусто
-F -> (S) | number | id
-   | +F | -F
+F -> +G | -G | G
+G -> (S) | number | id
