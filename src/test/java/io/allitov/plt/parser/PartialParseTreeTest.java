@@ -12,12 +12,22 @@ class PartialParseTreeTest {
 
     @Test
     void buildsPartialTreeForMissingPrimary() {
-        assertThatThrownBy(() -> new Parser(new Lexer("5 + + 3").tokenize()).parse())
+        assertThatThrownBy(() -> new Parser(new Lexer("5 + +").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
                     String tree = TreePrinter.render(exception.partialTree());
 
                     assertThat(tree).contains("S\n", "E'", "'+'", "number '5'", "error");
-                    assertThat(tree).doesNotContain("number '3'");
+                    assertThat(tree).contains("F\n", "'+'");
+                });
+    }
+
+    @Test
+    void buildsPartialTreeForMissingOperandAfterUnarySign() {
+        assertThatThrownBy(() -> new Parser(new Lexer("-").tokenize()).parse())
+                .isInstanceOfSatisfying(SyntaxException.class, exception -> {
+                    String tree = TreePrinter.render(exception.partialTree());
+
+                    assertThat(tree).containsSubsequence("S\n", "E\n", "F\n", "'-'", "F\n", "error");
                 });
     }
 

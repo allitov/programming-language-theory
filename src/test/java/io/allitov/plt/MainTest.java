@@ -24,11 +24,17 @@ class MainTest {
     }
 
     @Test
-    void returnsExpectedTokenError() {
+    void analyzesUnarySignedNumbers() {
+        assertThat(Main.analyze("-2")).startsWith("Expression is valid.\nS\n");
+        assertThat(Main.analyze("+2")).startsWith("Expression is valid.\nS\n");
+    }
+
+    @Test
+    void supportsUnarySignAfterBinaryOperator() {
         String result = Main.analyze("5 + + 3");
 
-        assertThat(result).contains("S\n", "number '5'", "error");
-        assertThat(result).endsWith("Error at position 4. Expected: number, id or '('");
+        assertThat(result).startsWith("Expression is valid.\nS\n");
+        assertThat(result).contains("number '5'", "+ '+'", "+ '+'", "number '3'");
     }
 
     @Test

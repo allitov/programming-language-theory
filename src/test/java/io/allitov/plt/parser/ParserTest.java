@@ -34,11 +34,25 @@ class ParserTest {
     }
 
     @Test
-    void reportsMissingPrimaryWithPosition() {
-        assertThatThrownBy(() -> new Parser(new Lexer("5 + + 3").tokenize()).parse())
+    void parsesUnarySignedFactors() {
+        List<Node> roots = List.of("-2", "+2", "-a", "+ (b - 10)", "2 * -3").stream()
+                .map(input -> new Parser(new Lexer(input).tokenize()).parse())
+                .toList();
+
+        assertThat(roots).allSatisfy(root -> assertThat(root.label()).isEqualTo("S"));
+
+        Node firstFactor = roots.getFirst().children().getFirst().children().getFirst().children().getFirst();
+        assertThat(firstFactor.label()).isEqualTo("F");
+        assertThat(firstFactor.children().getFirst().label()).isEqualTo("- '-'");
+        assertThat(firstFactor.children().get(1).label()).isEqualTo("number '2'");
+    }
+
+    @Test
+    void reportsMissingOperandAfterBinaryOperatorWithPosition() {
+        assertThatThrownBy(() -> new Parser(new Lexer("5 + +").tokenize()).parse())
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
-                    assertThat(exception).hasMessage("Error at position 4. Expected: number, id or '('");
-                    assertThat(exception.position()).isEqualTo(4);
+                    assertThat(exception).hasMessage("Error at position 5. Expected: number, id or '('");
+                    assertThat(exception.position()).isEqualTo(5);
                 });
     }
 

@@ -119,6 +119,17 @@ public class Parser {
 
     Node parseF() {
         Token current = currentToken();
+        if (current.type() == TokenType.PLUS || current.type() == TokenType.MINUS) {
+            Node sign = Node.terminal(current);
+            Node operand = null;
+            try {
+                match(current.type());
+                operand = parseF();
+                return new Node("F", List.of(sign, operand));
+            } catch (SyntaxException exception) {
+                throw raisePartial(exception, "F", new Node[]{sign, operand});
+            }
+        }
         if (current.type() == TokenType.NUMBER || current.type() == TokenType.ID) {
             return consumeTerminal();
         }
