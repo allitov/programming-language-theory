@@ -16,7 +16,7 @@ class PartialParseTreeTest {
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
                     String tree = TreePrinter.render(exception.partialTree());
 
-                    assertThat(tree).contains("S\n", "E'", "'+'", "number '5'", "error");
+                    assertThat(tree).contains("S\n", "E'", "'+'", "number '5'", "G\n", "error");
                     assertThat(tree).contains("F\n", "'+'");
                 });
     }
@@ -27,7 +27,7 @@ class PartialParseTreeTest {
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
                     String tree = TreePrinter.render(exception.partialTree());
 
-                    assertThat(tree).containsSubsequence("S\n", "E\n", "F\n", "'-'", "F\n", "error");
+                    assertThat(tree).containsSubsequence("S\n", "E\n", "F\n", "'-'", "G\n", "error");
                 });
     }
 
@@ -37,7 +37,7 @@ class PartialParseTreeTest {
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
                     String tree = TreePrinter.render(exception.partialTree());
 
-                    assertThat(tree).contains("S\n", "F\n", "'('", "number '7'", "'*'", "number '2'");
+                    assertThat(tree).contains("S\n", "F\n", "G\n", "'('", "number '7'", "'*'", "number '2'");
                 });
     }
 

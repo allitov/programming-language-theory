@@ -27,10 +27,10 @@ class ParserTest {
     void parsesNestedParentheses() {
         Node root = new Parser(new Lexer("((42))").tokenize()).parse();
 
-        Node firstF = root.children().getFirst().children().getFirst().children().getFirst();
-        assertThat(firstF.label()).isEqualTo("F");
-        assertThat(firstF.children()).hasSize(3);
-        assertThat(firstF.children().get(1).label()).isEqualTo("S");
+        Node firstG = root.children().getFirst().children().getFirst().children().getFirst().children().getFirst();
+        assertThat(firstG.label()).isEqualTo("G");
+        assertThat(firstG.children()).hasSize(3);
+        assertThat(firstG.children().get(1).label()).isEqualTo("S");
     }
 
     @Test
@@ -44,7 +44,9 @@ class ParserTest {
         Node firstFactor = roots.getFirst().children().getFirst().children().getFirst().children().getFirst();
         assertThat(firstFactor.label()).isEqualTo("F");
         assertThat(firstFactor.children().getFirst().label()).isEqualTo("- '-'");
-        assertThat(firstFactor.children().get(1).label()).isEqualTo("number '2'");
+        Node firstOperand = firstFactor.children().get(1);
+        assertThat(firstOperand.label()).isEqualTo("G");
+        assertThat(firstOperand.children().getFirst().label()).isEqualTo("number '2'");
     }
 
     @Test

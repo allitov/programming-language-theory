@@ -126,20 +126,26 @@ public class Parser {
             Node operand = null;
             try {
                 match(current.type());
-                operand = parseUnsignedFactor();
+                operand = parseG();
                 return new Node("F", List.of(sign, operand));
             } catch (SyntaxException exception) {
                 throw raisePartial(exception, "F", new Node[]{sign, operand});
             }
         }
 
-        return parseUnsignedFactor();
+        Node factor = null;
+        try {
+            factor = parseG();
+            return new Node("F", List.of(factor));
+        } catch (SyntaxException exception) {
+            throw raisePartial(exception, "F", new Node[]{factor});
+        }
     }
 
-    private Node parseUnsignedFactor() {
+    Node parseG() {
         Token current = checkCurrentToken();
         if (current.type() == TokenType.NUMBER || current.type() == TokenType.ID) {
-            return consumeTerminal();
+            return new Node("G", List.of(consumeTerminal()));
         }
         if (current.type() == TokenType.LEFT_PAREN) {
             Node leftParen = Node.terminal(current);
@@ -150,14 +156,14 @@ public class Parser {
                 expression = parseS();
                 rightParen = Node.terminal(currentToken());
                 match(TokenType.RIGHT_PAREN);
-                return new Node("F", List.of(leftParen, expression, rightParen));
+                return new Node("G", List.of(leftParen, expression, rightParen));
             } catch (SyntaxException exception) {
-                throw raisePartial(exception, "F", new Node[]{leftParen, expression, rightParen});
+                throw raisePartial(exception, "G", new Node[]{leftParen, expression, rightParen});
             }
         }
 
         throw syntaxException(PRIMARY_EXPECTED)
-                .withPartialTree(new Node("F", List.of(new Node("error", List.of()))));
+                .withPartialTree(new Node("G", List.of(new Node("error", List.of()))));
     }
 
     private void match(TokenType expected) {
