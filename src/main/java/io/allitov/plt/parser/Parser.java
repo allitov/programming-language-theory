@@ -4,10 +4,12 @@ import io.allitov.plt.tree.Node;
 import io.allitov.plt.exception.SyntaxException;
 import io.allitov.plt.token.Token;
 import io.allitov.plt.token.TokenType;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class Parser {
 
     private static final String PRIMARY_EXPECTED = "number, id or '('";
@@ -66,7 +68,7 @@ public class Parser {
     }
 
     Node parseEPrime() {
-        TokenType current = currentToken().type();
+        TokenType current = checkCurrentToken().type();
         if (current != TokenType.PLUS && current != TokenType.MINUS) {
             return new Node("E' (ε)", List.of());
         }
@@ -98,7 +100,7 @@ public class Parser {
     }
 
     Node parseTPrime() {
-        TokenType current = currentToken().type();
+        TokenType current = checkCurrentToken().type();
         if (current != TokenType.MULTIPLY && current != TokenType.DIVIDE) {
             return new Node("T' (ε)", List.of());
         }
@@ -118,7 +120,7 @@ public class Parser {
     }
 
     Node parseF() {
-        Token current = currentToken();
+        Token current = checkCurrentToken();
         if (current.type() == TokenType.PLUS || current.type() == TokenType.MINUS) {
             Node sign = Node.terminal(current);
             Node operand = null;
@@ -135,7 +137,7 @@ public class Parser {
     }
 
     private Node parseUnsignedFactor() {
-        Token current = currentToken();
+        Token current = checkCurrentToken();
         if (current.type() == TokenType.NUMBER || current.type() == TokenType.ID) {
             return consumeTerminal();
         }
@@ -177,6 +179,12 @@ public class Parser {
             throw syntaxException(TokenType.EOF.displayName());
         }
         return tokens.get(position);
+    }
+
+    private Token checkCurrentToken() {
+        Token token = currentToken();
+        log.info("current token check for {}", token);
+        return token;
     }
 
     private SyntaxException syntaxException(String expected) {
