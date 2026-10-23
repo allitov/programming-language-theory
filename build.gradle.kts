@@ -1,5 +1,3 @@
-import org.gradle.api.tasks.JavaExec
-
 plugins {
     application
     alias(libs.plugins.lombok)
@@ -27,11 +25,8 @@ dependencies {
     testRuntimeOnly(libs.junit.launcher)
 }
 
-application {
+tasks.run {
     mainClass.set("io.allitov.plt.Main")
-}
-
-tasks.named<JavaExec>("run") {
     standardInput = System.`in`
 }
 
