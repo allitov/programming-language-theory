@@ -46,25 +46,11 @@ public class Parser {
     }
 
     Node parseS() {
-        Node expression = null;
-        try {
-            expression = parseE();
-            return new Node("S", List.of(expression));
-        } catch (SyntaxException exception) {
-            throw raisePartial(exception, "S", new Node[]{expression});
-        }
+        return sequence("S", this::parseE);
     }
 
     Node parseE() {
-        Node term = null;
-        Node expressionPrime = null;
-        try {
-            term = parseT();
-            expressionPrime = parseEPrime();
-            return new Node("E", List.of(term, expressionPrime));
-        } catch (SyntaxException exception) {
-            throw raisePartial(exception, "E", new Node[]{term, expressionPrime});
-        }
+        return sequence("E", this::parseT, this::parseEPrime);
     }
 
     Node parseEPrime() {
@@ -73,30 +59,11 @@ public class Parser {
             return new Node("E' (ε)", List.of());
         }
 
-        Node operator = null;
-        Node term = null;
-        Node tail = null;
-        try {
-            operator = Node.terminal(currentToken());
-            match(current);
-            term = parseT();
-            tail = parseEPrime();
-            return new Node("E'", List.of(operator, term, tail));
-        } catch (SyntaxException exception) {
-            throw raisePartial(exception, "E'", new Node[]{operator, term, tail});
-        }
+        return sequence("E'", () -> matchOperator(current), this::parseT, this::parseEPrime);
     }
 
     Node parseT() {
-        Node factor = null;
-        Node termPrime = null;
-        try {
-            factor = parseF();
-            termPrime = parseTPrime();
-            return new Node("T", List.of(factor, termPrime));
-        } catch (SyntaxException exception) {
-            throw raisePartial(exception, "T", new Node[]{factor, termPrime});
-        }
+        return sequence("T", this::parseF, this::parseTPrime);
     }
 
     Node parseTPrime() {
@@ -105,41 +72,16 @@ public class Parser {
             return new Node("T' (ε)", List.of());
         }
 
-        Node operator = null;
-        Node factor = null;
-        Node tail = null;
-        try {
-            operator = Node.terminal(currentToken());
-            match(current);
-            factor = parseF();
-            tail = parseTPrime();
-            return new Node("T'", List.of(operator, factor, tail));
-        } catch (SyntaxException exception) {
-            throw raisePartial(exception, "T'", new Node[]{operator, factor, tail});
-        }
+        return sequence("T'", () -> matchOperator(current), this::parseF, this::parseTPrime);
     }
 
     Node parseF() {
         Token current = checkCurrentToken();
         if (current.type() == TokenType.PLUS || current.type() == TokenType.MINUS) {
-            Node sign = Node.terminal(current);
-            Node operand = null;
-            try {
-                match(current.type());
-                operand = parseG();
-                return new Node("F", List.of(sign, operand));
-            } catch (SyntaxException exception) {
-                throw raisePartial(exception, "F", new Node[]{sign, operand});
-            }
+            return sequence("F", () -> matchOperator(current.type()), this::parseG);
         }
 
-        Node factor = null;
-        try {
-            factor = parseG();
-            return new Node("F", List.of(factor));
-        } catch (SyntaxException exception) {
-            throw raisePartial(exception, "F", new Node[]{factor});
-        }
+        return sequence("F", this::parseG);
     }
 
     Node parseG() {
@@ -148,22 +90,21 @@ public class Parser {
             return new Node("G", List.of(consumeTerminal()));
         }
         if (current.type() == TokenType.LEFT_PAREN) {
-            Node leftParen = Node.terminal(current);
-            match(TokenType.LEFT_PAREN);
-            Node expression = null;
-            Node rightParen = null;
-            try {
-                expression = parseS();
-                rightParen = Node.terminal(currentToken());
-                match(TokenType.RIGHT_PAREN);
-                return new Node("G", List.of(leftParen, expression, rightParen));
-            } catch (SyntaxException exception) {
-                throw raisePartial(exception, "G", new Node[]{leftParen, expression, rightParen});
-            }
+            return sequence(
+                    "G",
+                    () -> matchOperator(TokenType.LEFT_PAREN),
+                    this::parseS,
+                    () -> matchOperator(TokenType.RIGHT_PAREN));
         }
 
         throw syntaxException(PRIMARY_EXPECTED)
                 .withPartialTree(new Node("G", List.of(new Node("error", List.of()))));
+    }
+
+    private Node matchOperator(TokenType expected) {
+        Node operator = Node.terminal(currentToken());
+        match(expected);
+        return operator;
     }
 
     private void match(TokenType expected) {
@@ -201,22 +142,37 @@ public class Parser {
         return new SyntaxException(message, errorPosition);
     }
 
-    private SyntaxException raisePartial(
-            SyntaxException exception, String label, Node[] parsedChildren) {
+    /**
+     * Parses the children of the {@code label} node in order. When a child fails, its
+     * partial (truncated) subtree is embedded into the tree, the first failure is remembered,
+     * and parsing continues with the remaining children. This way the tree printed on error
+     * stays complete: only the branch containing the error is truncated, while all the
+     * branches parsed before and after the error are rendered as usual.
+     */
+    private Node sequence(String label, ParseStep... steps) {
         List<Node> children = new ArrayList<>();
-        boolean failureAdded = false;
-        for (Node child : parsedChildren) {
-            if (child != null) {
-                children.add(child);
-            } else if (!failureAdded) {
+        SyntaxException failure = null;
+        for (ParseStep step : steps) {
+            try {
+                children.add(step.parse());
+            } catch (SyntaxException exception) {
                 children.add(exception.partialTree());
-                failureAdded = true;
-            } else {
-                break;
+                if (failure == null) {
+                    failure = exception;
+                }
             }
         }
 
-        return exception.withPartialTree(new Node(label, children));
+        if (failure != null) {
+            throw failure.withPartialTree(new Node(label, children));
+        }
+        return new Node(label, children);
+    }
+
+    @FunctionalInterface
+    private interface ParseStep {
+
+        Node parse();
     }
 
     private String tokenExpectation(TokenType type) {

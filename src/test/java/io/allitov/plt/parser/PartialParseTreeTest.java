@@ -18,6 +18,7 @@ class PartialParseTreeTest {
 
                     assertThat(tree).contains("S\n", "E'", "'+'", "number '5'", "G\n", "error");
                     assertThat(tree).contains("F\n", "'+'");
+                    assertThat(tree).containsSubsequence("error", "T' (ε)", "E' (ε)");
                 });
     }
 
@@ -38,6 +39,7 @@ class PartialParseTreeTest {
                     String tree = TreePrinter.render(exception.partialTree());
 
                     assertThat(tree).contains("S\n", "F\n", "G\n", "'('", "number '7'", "'*'", "number '2'");
+                    assertThat(tree).containsSubsequence("error", "T' (ε)", "E' (ε)");
                 });
     }
 
@@ -47,6 +49,19 @@ class PartialParseTreeTest {
                 .isInstanceOfSatisfying(SyntaxException.class, exception -> {
                     assertThat(TreePrinter.render(exception.partialTree()))
                             .containsSubsequence("S\n", "E\n", "number '2'");
+                });
+    }
+
+    @Test
+    void rendersBranchesParsedAfterTheError() {
+        assertThatThrownBy(() -> new Parser(new Lexer("2 + * 3 + 4").tokenize()).parse())
+                .isInstanceOfSatisfying(SyntaxException.class, exception -> {
+                    String tree = TreePrinter.render(exception.partialTree());
+
+                    assertThat(exception).hasMessage("Error at position 4. Expected: number, id or '('");
+                    assertThat(tree).containsSubsequence(
+                            "error", "'*'", "number '3'", "+ '+'", "number '4'");
+                    assertThat(tree).contains("S\n", "E'\n", "T'\n", "T' (ε)", "E' (ε)");
                 });
     }
 }
