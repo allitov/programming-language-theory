@@ -142,13 +142,6 @@ public class Parser {
         return new SyntaxException(message, errorPosition);
     }
 
-    /**
-     * Parses the children of the {@code label} node in order. When a child fails, its
-     * partial (truncated) subtree is embedded into the tree, the first failure is remembered,
-     * and parsing continues with the remaining children. This way the tree printed on error
-     * stays complete: only the branch containing the error is truncated, while all the
-     * branches parsed before and after the error are rendered as usual.
-     */
     private Node sequence(String label, ParseStep... steps) {
         List<Node> children = new ArrayList<>();
         SyntaxException failure = null;
