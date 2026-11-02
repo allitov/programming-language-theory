@@ -36,7 +36,12 @@ public class Main {
         MinimizationResult result = new AutomatonMinimizer().minimize(original);
         DeterminismReport determinism = result.determinism();
         StringBuilder report = new StringBuilder();
-        report.append("Input automaton:\n").append(AutomatonPrinter.print(original)).append('\n');
+        report.append("Input automaton:\n")
+              .append(AutomatonPrinter.print(original))
+              .append('\n')
+              .append("Graphviz DOT (input automaton):\n")
+              .append(AutomatonPrinter.toDot(original))
+              .append('\n');
         report.append("Deterministic: ").append(determinism.deterministic() ? "yes" : "no").append('\n');
         for (String violation : determinism.violations()) {
             report.append("  ! ").append(violation).append('\n');
@@ -45,12 +50,17 @@ public class Main {
             report.append('\n')
                   .append("After subset construction:\n")
                   .append(AutomatonPrinter.print(result.determinized()))
-                  .append('\n');
+                  .append('\n')
+                  .append("Graphviz DOT (intermediate DFA):\n")
+                  .append(AutomatonPrinter.toDot(result.determinized()));
         }
         report.append('\n')
               .append("Minimal DFA (states: ").append(result.determinized().getStates().size())
               .append(" -> ").append(result.minimized().getStates().size()).append("):\n")
-              .append(AutomatonPrinter.print(result.minimized()));
+              .append(AutomatonPrinter.print(result.minimized()))
+              .append('\n')
+              .append("Graphviz DOT (minimal DFA):\n")
+              .append(AutomatonPrinter.toDot(result.minimized()));
         return report.toString();
     }
 }

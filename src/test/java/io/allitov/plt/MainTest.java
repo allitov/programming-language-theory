@@ -26,7 +26,12 @@ class MainTest {
             .contains("state 'q0' has 2 transitions on symbol '0'")
             .contains("After subset construction:")
             .contains("Minimal DFA (states: 3 -> 3)")
-            .contains("{q0,q1} 1 {q0,q2}");
+            .contains("{q0,q1} 1 {q0,q2}")
+            .contains("Graphviz DOT (input automaton):")
+            .contains("Graphviz DOT (intermediate DFA):")
+            .contains("Graphviz DOT (minimal DFA):")
+            .contains("digraph automaton {")
+            .contains("\"{q0,q2}\" [shape = doublecircle];");
     }
 
     @Test
