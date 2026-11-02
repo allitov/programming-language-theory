@@ -7,16 +7,11 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/**
- * Renders automata for humans: back into the input text format (so the result of
- * a run can be fed into the program again) and into the Graphviz DOT format.
- */
 public final class AutomatonPrinter {
 
     private AutomatonPrinter() {
     }
 
-    /** Prints the automaton in the same line-oriented format the parser accepts. */
     public static String print(FiniteAutomaton automaton) {
         StringBuilder out = new StringBuilder();
         out.append("states: ").append(String.join(" ", sorted(automaton.getStates()))).append('\n');
@@ -39,7 +34,6 @@ public final class AutomatonPrinter {
         return out.toString();
     }
 
-    /** Exports the automaton as a Graphviz DOT digraph. */
     public static String toDot(FiniteAutomaton automaton) {
         StringBuilder out = new StringBuilder();
         out.append("digraph automaton {\n");

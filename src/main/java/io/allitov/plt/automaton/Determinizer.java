@@ -9,16 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Converts an arbitrary finite automaton into an equivalent DFA using the subset
- * construction (Rabin-Scott powerset construction).
- *
- * <p>Every DFA state represents a set of NFA states that can be active simultaneously;
- * before and after each step epsilon closures are taken so that epsilon transitions
- * disappear. A subset is accepting when it contains at least one accepting NFA state.
- * A DFA state that is the only element of its subset keeps the original state name,
- * otherwise it is named "{q0,q1,q3}".</p>
- */
 public final class Determinizer {
 
     public FiniteAutomaton determinize(FiniteAutomaton automaton) {
@@ -62,7 +52,6 @@ public final class Determinizer {
         return new FiniteAutomaton(states, automaton.getAlphabet(), nameBySubset.get(startSubset), finalStates, transitions);
     }
 
-    /** Names a subset of states: a singleton keeps its own name, larger sets become "{q0,q1,q2}". */
     static String subsetName(Collection<String> subset) {
         List<String> sorted = subset.stream().sorted().toList();
         if (sorted.size() == 1) {

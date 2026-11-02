@@ -3,13 +3,6 @@ package io.allitov.plt.automaton;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Checks whether a finite automaton is deterministic.
- *
- * <p>An automaton is deterministic when it has no epsilon transitions and every
- * pair (state, symbol) is mapped to at most one target state. Missing transitions
- * are allowed: a partial DFA is still deterministic.</p>
- */
 public final class DeterminismChecker {
 
     public DeterminismReport check(FiniteAutomaton automaton) {

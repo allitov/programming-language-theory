@@ -10,24 +10,6 @@ import java.util.Set;
 
 import io.allitov.plt.exception.AutomatonFormatException;
 
-/**
- * Parses the line-oriented text description of a finite automaton:
- * <pre>
- * # comment line
- * states: q0 q1 q2
- * alphabet: a b
- * start: q0
- * final: q2
- *
- * transitions:
- * q0 a q0 q1
- * q1 eps q2
- * </pre>
- * The {@code eps} (or the literal epsilon letter) symbol denotes an epsilon transition.
- * A transition line maps one source state and one symbol to one or more target states,
- * which is exactly where non-determinism is expressed. All errors are reported with
- * the line number of the offending text.
- */
 public final class AutomatonParser {
 
     private static final String EPSILON_ALIAS = "eps";
@@ -124,7 +106,6 @@ public final class AutomatonParser {
         return new FiniteAutomaton(states, alphabet, start, finalStates, transitions);
     }
 
-    /** Renders the epsilon symbol back to its ASCII alias for messages and printing. */
     static String displaySymbol(String symbol) {
         return FiniteAutomaton.EPSILON.equals(symbol) ? EPSILON_ALIAS : symbol;
     }

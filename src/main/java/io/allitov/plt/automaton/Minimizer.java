@@ -10,17 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Minimizes a DFA by refining the partition of states into equivalence classes
- * (the Moore-style partition refinement).
- *
- * <p>Two states are equivalent when no input word distinguishes them: starting from
- * the states, both words are either accepted or rejected. The algorithm first removes
- * unreachable states, then iteratively splits classes while states inside a class
- * disagree on their own acceptance or on the class of a successor. Missing transitions
- * participate as a dedicated "no transition" marker, so a partial DFA is minimized
- * correctly and stays partial instead of receiving an artificial trap state.</p>
- */
 public final class Minimizer {
 
     private static final int NO_TARGET = -1;

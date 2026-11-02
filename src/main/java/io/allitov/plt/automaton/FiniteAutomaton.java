@@ -15,22 +15,10 @@ import java.util.Set;
 import lombok.ToString;
 import lombok.Value;
 
-/**
- * Immutable finite automaton: a set of states, an input alphabet, a start state,
- * a set of final states and a transition relation.
- *
- * <p>The same class models both deterministic and non-deterministic automata.
- * Non-determinism means that a pair (state, symbol) may be mapped to several target
- * states; additionally, epsilon transitions ({@link #EPSILON}) may consume no input
- * at all.</p>
- *
- * <p>The constructor validates all invariants so that every instance is well formed.</p>
- */
 @Value
 @ToString(onlyExplicitlyIncluded = true)
 public class FiniteAutomaton {
 
-    /** Reserved symbol of epsilon transitions: they consume no input. */
     public static final String EPSILON = "\u03B5";
 
     @ToString.Include
@@ -102,10 +90,6 @@ public class FiniteAutomaton {
         this.transitionsBySource = index(transitionCopy);
     }
 
-    /**
-     * Returns all states reachable from {@code state} by reading exactly {@code symbol};
-     * several targets are possible in a non-deterministic automaton.
-     */
     public Set<String> targets(String state, String symbol) {
         Map<String, Set<String>> bySymbol = transitionsBySource.get(state);
         if (bySymbol == null) {
@@ -114,10 +98,6 @@ public class FiniteAutomaton {
         return bySymbol.getOrDefault(symbol, Set.of());
     }
 
-    /**
-     * Computes the epsilon closure: every state reachable from the given ones
-     * by epsilon transitions only, including the source states themselves.
-     */
     public Set<String> epsilonClosure(Collection<String> source) {
         Set<String> closure = new LinkedHashSet<>(source);
         Deque<String> pending = new ArrayDeque<>(closure);
@@ -132,15 +112,10 @@ public class FiniteAutomaton {
         return closure;
     }
 
-    /** Tells whether the automaton contains at least one epsilon transition. */
     public boolean hasEpsilonTransitions() {
         return transitions.stream().anyMatch(transition -> EPSILON.equals(transition.symbol()));
     }
 
-    /**
-     * Simulates the automaton on a sequence of input symbols. A word is accepted
-     * when at least one run of a non-deterministic automaton ends in a final state.
-     */
     public boolean accepts(List<String> symbols) {
         Set<String> current = epsilonClosure(Set.of(start));
         for (String symbol : symbols) {
@@ -153,7 +128,6 @@ public class FiniteAutomaton {
         return !Collections.disjoint(current, finals);
     }
 
-    /** Convenience overload of {@link #accepts(List)} for words over single-character symbols. */
     public boolean acceptsWord(String word) {
         List<String> symbols = new ArrayList<>(word.length());
         for (int index = 0; index < word.length(); index++) {
