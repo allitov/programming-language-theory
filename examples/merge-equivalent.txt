@@ -1,0 +1,15 @@
+# ДКА с двумя эквивалентными состояниями (q2 и q3)
+states: q0 q1 q2 q3
+alphabet: a b
+start: q0
+final: q2 q3
+
+transitions:
+q0 a q1
+q0 b q2
+q1 a q3
+q1 b q2
+q2 a q2
+q2 b q2
+q3 a q3
+q3 b q3
