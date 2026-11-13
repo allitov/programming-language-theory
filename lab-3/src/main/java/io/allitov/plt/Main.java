@@ -7,6 +7,7 @@ import io.allitov.plt.pda.PdaRunner;
 import io.allitov.plt.pda.PushdownAutomaton;
 import io.allitov.plt.pda.RunResult;
 import io.allitov.plt.pda.Step;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -18,11 +19,12 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 @Slf4j
+@UtilityClass
 public class Main {
 
-    private static final PdaRunner RUNNER = new PdaRunner();
+    private final PdaRunner RUNNER = new PdaRunner();
 
-    static void main(String[] args) {
+    void main(String[] args) {
         try {
             runSession(args);
         } catch (IOException | AutomatonFormatException | IllegalArgumentException exception) {
@@ -31,7 +33,7 @@ public class Main {
         }
     }
 
-    private static void runSession(String[] args) throws IOException {
+    private void runSession(String[] args) throws IOException {
         try (Scanner scanner = new Scanner(System.in)) {
             PushdownAutomaton automaton = loadAutomaton(args, scanner);
             log.info("{}", PdaPrinter.summary(automaton));
@@ -51,7 +53,7 @@ public class Main {
         }
     }
 
-    static PushdownAutomaton loadAutomaton(String[] args, Scanner scanner) throws IOException {
+    PushdownAutomaton loadAutomaton(String[] args, Scanner scanner) throws IOException {
         String path = args.length > 0 ? args[0] : null;
         if (path == null) {
             log.info("Enter the path to the automaton description file:");
@@ -59,14 +61,14 @@ public class Main {
         }
         try {
             return PdaParser.parse(Files.readString(Path.of(path), StandardCharsets.UTF_8));
-        } catch (NoSuchFileException exception) {
+        } catch (NoSuchFileException _) {
             throw new IOException("the automaton file '" + path + "' does not exist");
-        } catch (InvalidPathException exception) {
+        } catch (InvalidPathException _) {
             throw new IOException("invalid file path '" + path + "'");
         }
     }
 
-    static String check(PushdownAutomaton automaton, String chain) {
+    String check(PushdownAutomaton automaton, String chain) {
         RunResult result = RUNNER.run(automaton, chain);
         StringBuilder report = new StringBuilder();
         report.append("Checking string: ").append(PdaPrinter.formatChain(chain)).append('\n');

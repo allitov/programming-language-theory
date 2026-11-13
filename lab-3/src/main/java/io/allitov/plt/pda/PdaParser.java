@@ -35,9 +35,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PdaParser {
 
-    private static final String EPSILON_ALIAS = "eps";
+    private final String EPSILON_ALIAS = "eps";
 
-    public static PushdownAutomaton parse(String text) {
+    public PushdownAutomaton parse(String text) {
         Objects.requireNonNull(text, "text");
         Set<String> states = new LinkedHashSet<>();
         Set<String> alphabet = new LinkedHashSet<>();
@@ -140,7 +140,7 @@ public class PdaParser {
         return new PushdownAutomaton(states, alphabet, stackAlphabet, start, finalStates, transitions);
     }
 
-    private static List<String> splitPush(int lineNumber, String push, Set<String> stackAlphabet) {
+    private List<String> splitPush(int lineNumber, String push, Set<String> stackAlphabet) {
         if (isLambda(push)) {
             return List.of();
         }
@@ -167,32 +167,32 @@ public class PdaParser {
         return List.copyOf(symbols);
     }
 
-    private static boolean isLambda(String token) {
+    private boolean isLambda(String token) {
         return PushdownAutomaton.LAMBDA.equals(token) || PushdownAutomaton.EPSILON.equals(token) || EPSILON_ALIAS.equals(token);
     }
 
-    private static String normalizeInput(String token) {
+    private String normalizeInput(String token) {
         return isLambda(token) ? PushdownAutomaton.LAMBDA : token;
     }
 
-    private static List<String> tokens(String value) {
+    private List<String> tokens(String value) {
         String trimmed = value.trim();
         return trimmed.isEmpty() ? List.of() : List.of(trimmed.split("\\s+"));
     }
 
-    private static void requireNewSection(Set<String> declaredKeys, String key, int lineNumber) {
+    private void requireNewSection(Set<String> declaredKeys, String key, int lineNumber) {
         if (!declaredKeys.add(key)) {
             throw error(lineNumber, "duplicate '" + key + ":' section");
         }
     }
 
-    private static void requireSection(Set<String> declaredKeys, String key) {
+    private void requireSection(Set<String> declaredKeys, String key) {
         if (!declaredKeys.contains(key)) {
             throw new AutomatonFormatException("missing '" + key + ":' declaration");
         }
     }
 
-    private static AutomatonFormatException error(int lineNumber, String message) {
+    private AutomatonFormatException error(int lineNumber, String message) {
         return new AutomatonFormatException("line " + lineNumber + ": " + message);
     }
 
