@@ -21,9 +21,14 @@ dependencies {
     testRuntimeOnly(libs.junit.launcher)
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+}
+
 tasks.run {
     mainClass.set("io.allitov.plt.Main")
     standardInput = System.`in`
+    jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8", "-Dfile.encoding=UTF-8")
 }
 
 tasks.test {

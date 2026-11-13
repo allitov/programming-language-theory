@@ -1,0 +1,14 @@
+# L = { words over {0, 1} that contain "11" }
+states: q0 q1 q2
+alphabet: 0 1
+stack: Z
+start: q0
+final: q2
+
+transitions:
+q0 0 Z = q0 Z
+q0 1 Z = q1 Z
+q1 0 Z = q0 Z
+q1 1 Z = q2 Z
+q2 0 Z = q2 Z
+q2 1 Z = q2 Z
