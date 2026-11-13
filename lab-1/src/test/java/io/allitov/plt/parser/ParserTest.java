@@ -1,15 +1,15 @@
 package io.allitov.plt.parser;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import java.util.List;
-
 import io.allitov.plt.exception.SyntaxException;
 import io.allitov.plt.lexer.Lexer;
 import io.allitov.plt.tree.Node;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ParserTest {
 

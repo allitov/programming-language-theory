@@ -1,12 +1,12 @@
 package io.allitov.plt.parser;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import io.allitov.plt.exception.SyntaxException;
 import io.allitov.plt.lexer.Lexer;
 import io.allitov.plt.tree.TreePrinter;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PartialParseTreeTest {
 
