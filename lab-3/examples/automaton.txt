@@ -1,0 +1,22 @@
+# L = { a^2n+1 c^k b^2n | k > 0, n >= 0 }
+states: q0 q1 q2 q3 q4 q5 qf
+alphabet: a b c
+stack: Z a
+start: q0
+final: qf
+
+transitions:
+q0 a Z = q1 Z
+q1 a Z = q2 Z
+q2 a Z = q1 aZ
+q1 a a = q2 a
+q2 a a = q1 aa
+q1 c Z = q3 Z
+q1 c a = q3 a
+q3 c a = q3 a
+q3 c Z = q3 Z
+q3 b a = q4 a
+q3 λ Z = qf λ
+q4 b a = q5 λ
+q5 b a = q4 a
+q5 λ Z = qf λ
