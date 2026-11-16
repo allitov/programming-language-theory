@@ -109,9 +109,6 @@ public class PushdownAutomaton {
         this.transitionsByKey = index(transitionCopy);
     }
 
-    /**
-     * Returns the only transition applicable in the configuration (state, input, stackTop), if any.
-     */
     public Optional<PdaTransition> transition(String state, String input, String stackTop) {
         return Optional.ofNullable(transitionsByKey.get(new TransitionKey(state, input, stackTop)));
     }
