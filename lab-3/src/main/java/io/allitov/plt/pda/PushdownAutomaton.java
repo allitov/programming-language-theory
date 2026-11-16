@@ -99,7 +99,7 @@ public class PushdownAutomaton {
             }
             transitionCopy.add(transition);
         }
-        requireDeterminism(transitionCopy);
+        requireUniqueTransitions(transitionCopy);
         this.states = Collections.unmodifiableSet(stateCopy);
         this.alphabet = Collections.unmodifiableSet(alphabetCopy);
         this.stackAlphabet = Collections.unmodifiableSet(stackCopy);
@@ -127,29 +127,13 @@ public class PushdownAutomaton {
         return symbol;
     }
 
-    private static void requireDeterminism(Set<PdaTransition> transitions) {
+    private static void requireUniqueTransitions(Set<PdaTransition> transitions) {
         Set<TransitionKey> seen = new HashSet<>();
-        Map<String, Map<String, Set<String>>> inputsByStateTop = new LinkedHashMap<>();
         for (PdaTransition transition : transitions) {
             TransitionKey key = new TransitionKey(transition.from(), transition.input(), transition.top());
             if (!seen.add(key)) {
                 throw new IllegalArgumentException("the automaton is not deterministic: the transition (" + transition.from()
                     + ", " + transition.input() + ", " + transition.top() + ") is defined more than once");
-            }
-            inputsByStateTop.computeIfAbsent(transition.from(), ignored -> new LinkedHashMap<>())
-                            .computeIfAbsent(transition.top(), ignored -> new LinkedHashSet<>())
-                            .add(transition.input());
-        }
-        for (Map.Entry<String, Map<String, Set<String>>> stateEntry : inputsByStateTop.entrySet()) {
-            for (Map.Entry<String, Set<String>> topEntry : stateEntry.getValue().entrySet()) {
-                Set<String> inputs = topEntry.getValue();
-                if (!inputs.contains(LAMBDA) || inputs.size() < 2) {
-                    continue;
-                }
-                String symbol = inputs.stream().filter(input -> !LAMBDA.equals(input)).findFirst().orElseThrow();
-                throw new IllegalArgumentException("the automaton is not deterministic: state '" + stateEntry.getKey()
-                    + "' has both a λ-transition and a transition on input '" + symbol + "' for stack top '"
-                    + topEntry.getKey() + "'");
             }
         }
     }

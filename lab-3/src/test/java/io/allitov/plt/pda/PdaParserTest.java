@@ -295,8 +295,8 @@ class PdaParserTest {
     }
 
     @Test
-    void rejectsNonDeterministicLambdaConflict() {
-        assertThatThrownBy(() -> PdaParser.parse("""
+    void parsesLambdaTransitionCombinedWithSymbolTransition() {
+        PushdownAutomaton automaton = PdaParser.parse("""
             states: q0 q1
             alphabet: a
             stack: Z
@@ -305,9 +305,9 @@ class PdaParserTest {
             transitions:
             q0 λ Z = q1 Z
             q0 a Z = q1 Z
-            """))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("not deterministic")
-            .hasMessageContaining("both a λ-transition and a transition on input 'a'");
+            """);
+        assertThat(automaton.getTransitions()).containsExactlyInAnyOrder(
+            new PdaTransition("q0", PushdownAutomaton.LAMBDA, "Z", "q1", List.of("Z")),
+            new PdaTransition("q0", "a", "Z", "q1", List.of("Z")));
     }
 }

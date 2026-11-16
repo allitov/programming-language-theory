@@ -96,13 +96,13 @@ class PushdownAutomatonTest {
     }
 
     @Test
-    void rejectsLambdaTransitionCombinedWithSymbolTransition() {
-        assertThatThrownBy(() -> automaton(Set.of("q0", "q1"), Set.of("a"), Set.of("Z"), "q0", Set.of(),
-            new PdaTransition("q0", PushdownAutomaton.LAMBDA, "Z", "q1", List.of()),
-            new PdaTransition("q0", "a", "Z", "q1", List.of())))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("not deterministic")
-            .hasMessageContaining("state 'q0' has both a λ-transition and a transition on input 'a' for stack top 'Z'");
+    void allowsLambdaTransitionCombinedWithSymbolTransition() {
+        PdaTransition lambda = new PdaTransition("q0", PushdownAutomaton.LAMBDA, "Z", "q1", List.of());
+        PdaTransition symbol = new PdaTransition("q0", "a", "Z", "q1", List.of());
+        PushdownAutomaton automaton = automaton(Set.of("q0", "q1"), Set.of("a"), Set.of("Z"), "q0", Set.of(),
+            lambda, symbol);
+        assertThat(automaton.transition("q0", "a", "Z")).contains(symbol);
+        assertThat(automaton.transition("q0", PushdownAutomaton.LAMBDA, "Z")).contains(lambda);
     }
 
     @Test

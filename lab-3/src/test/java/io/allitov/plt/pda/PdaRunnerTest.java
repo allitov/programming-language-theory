@@ -162,6 +162,25 @@ class PdaRunnerTest {
     }
 
     @Test
+    void symbolMoveTakesPriorityOverLambdaMove() {
+        PushdownAutomaton automaton = PdaParser.parse("""
+            states: q0 q1
+            alphabet: a
+            stack: Z
+            start: q0
+            final: q1
+            transitions:
+            q0 λ Z = q1 Z
+            q0 a Z = q0 Z
+            """);
+        RunResult result = runner.run(automaton, "a");
+        assertThat(result.steps()).satisfiesExactly(
+            step -> assertThat(PdaPrinter.formatStep(step)).isEqualTo("1) (q0, a, Z) -> (q0, λ, Z)"),
+            step -> assertThat(PdaPrinter.formatStep(step)).isEqualTo("2) (q0, λ, Z) -> (q1, λ, Z)"));
+        assertThat(result.accepted()).isTrue();
+    }
+
+    @Test
     void acceptsByFinalStateReachedAfterLastInputSymbol() {
         PushdownAutomaton automaton = PdaParser.parse("""
             states: q0 q1
