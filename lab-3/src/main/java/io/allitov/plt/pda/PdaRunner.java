@@ -7,23 +7,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Executes a deterministic pushdown automaton on an input string and records every step.
- *
- * <p>A string is accepted when the automaton has consumed the whole input and stands in a final
- * state. Otherwise the run result explains the reason: a missing transition (the automaton got
- * stuck), a non-final state at the end of the input, a symbol outside of the alphabet, or a
- * λ-loop that exceeds the step limit.</p>
- */
 public class PdaRunner {
 
-    /** Guards against automata that never stop on λ-moves. */
     public static final int STEP_LIMIT = 10_000;
 
-    /**
-     * Runs the automaton on the raw chain typed by the user. The literal λ (or ε) denotes the
-     * empty string; any other chain is split into alphabet symbols by the longest match.
-     */
     public RunResult run(PushdownAutomaton automaton, String chain) {
         Objects.requireNonNull(automaton, "automaton");
         Objects.requireNonNull(chain, "chain");
@@ -41,9 +28,6 @@ public class PdaRunner {
         }
     }
 
-    /**
-     * Runs the automaton on an already tokenized input.
-     */
     public RunResult run(PushdownAutomaton automaton, List<String> input) {
         Objects.requireNonNull(automaton, "automaton");
         Objects.requireNonNull(input, "input");
@@ -68,7 +52,7 @@ public class PdaRunner {
                 current = apply(current, lambdaMove.get(), false, steps);
                 continue;
             }
-            String symbol = current.input().get(0);
+            String symbol = current.input().getFirst();
             Optional<PdaTransition> move = lookup(automaton, current, symbol);
             boolean consumes = true;
             if (move.isEmpty()) {
@@ -98,17 +82,11 @@ public class PdaRunner {
 
     private static Optional<PdaTransition> lookup(PushdownAutomaton automaton, Configuration current, String input) {
         if (current.stack().isEmpty()) {
-            // an empty stack has no top symbol, so no transition can ever be applicable
             return Optional.empty();
         }
-        return automaton.transition(current.state(), input, current.stack().get(0));
+        return automaton.transition(current.state(), input, current.stack().getFirst());
     }
 
-    /**
-     * Splits the chain into alphabet symbols using the longest match at every position.
-     *
-     * @throws ChainFormatException when no alphabet symbol matches at some position
-     */
     static List<String> tokenize(String chain, Set<String> alphabet) {
         List<String> ordered = alphabet.stream()
             .sorted(Comparator.comparingInt(String::length).reversed())

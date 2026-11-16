@@ -12,26 +12,6 @@ import java.util.Set;
 import io.allitov.plt.exception.AutomatonFormatException;
 import lombok.experimental.UtilityClass;
 
-/**
- * Parses the textual description of a deterministic pushdown automaton:
- *
- * <pre>
- * states: q1 q2 q3 q4 q5 q6
- * alphabet: 0 1
- * stack: Z 0 1
- * start: q4
- * final: q1 q5
- *
- * transitions:
- * q4 0 Z = q5 0Z
- * q5 1 0 = q5 λ
- * </pre>
- *
- * <p>The '=' separator in a transition line is optional. The push part (the replacement of the stack
- * top) may be λ (the symbol is removed), the top symbol itself (nothing changes) or any sequence
- * of stack symbols whose first symbol becomes the new stack top. A λ (or ε, or "eps") input means
- * a move that consumes no input.</p>
- */
 @UtilityClass
 public class PdaParser {
 

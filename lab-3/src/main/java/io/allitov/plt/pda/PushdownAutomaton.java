@@ -13,26 +13,14 @@ import java.util.Set;
 import lombok.ToString;
 import lombok.Value;
 
-/**
- * A deterministic pushdown automaton (DPDA).
- *
- * <p>The automaton always starts with the initial stack symbol {@code Z} as the only stack entry.
- * The transition function maps a triple (state, input symbol, stack top) to exactly one move;
- * a λ input means a move that does not consume any input symbol. Determinism is checked on
- * construction: for every triple at most one transition may exist, and a λ move must not
- * coexist with a move that reads a real symbol for the same (state, stack top) pair.</p>
- */
 @Value
 @ToString(onlyExplicitlyIncluded = true)
 public class PushdownAutomaton {
 
-    /** Denotes the empty string (an empty remaining input) and the empty stack. */
     public static final String LAMBDA = "λ";
 
-    /** Accepted alias of {@link #LAMBDA} in transition descriptions. */
     public static final String EPSILON = "ε";
 
-    /** The initial (bottom) stack symbol which is always on the stack when the run starts. */
     public static final String INITIAL_STACK = "Z";
 
     @ToString.Include
