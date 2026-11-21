@@ -1,0 +1,17 @@
+# L = { a^n b^n | n >= 1 }
+states: q0 q1 q2 q3 q4 qf
+alphabet: a b c
+stack: Z a
+start: q0
+final: qf
+
+transitions:
+q0 a Z = q1 aZ
+q0 a a = q1 a
+q1 a a = q0 aa
+q0 b a = q2 a
+q2 c a = q3 a
+q3 c a = q4 a
+q4 c a = q3 λ
+q3 λ Z = qf λ
+q3 c Z = q3 Z
