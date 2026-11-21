@@ -15,6 +15,8 @@ java {
 dependencies {
     implementation(libs.logback.classic)
     implementation(libs.jackson)
+    implementation(libs.apache.lang)
+    implementation(libs.apache.collections)
 
     testImplementation(libs.assertj)
     testImplementation(platform(libs.junit.bom))

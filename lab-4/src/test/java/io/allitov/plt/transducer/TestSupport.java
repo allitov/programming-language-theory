@@ -1,5 +1,7 @@
 package io.allitov.plt.transducer;
 
+import io.allitov.plt.parsing.TransducerParser;
+
 import java.io.IOException;
 import java.nio.file.Path;
 

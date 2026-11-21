@@ -1,10 +1,13 @@
-package io.allitov.plt.transducer;
+package io.allitov.plt.parser;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import io.allitov.plt.parsing.TransducerParser;
+import io.allitov.plt.transducer.Transducer;
+import io.allitov.plt.transducer.Transition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

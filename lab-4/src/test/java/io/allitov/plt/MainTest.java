@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.allitov.plt.console.Console;
 import io.allitov.plt.transducer.Transducer;
-import io.allitov.plt.transducer.TransducerParser;
+import io.allitov.plt.parsing.TransducerParser;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.contains;

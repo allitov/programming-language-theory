@@ -1,4 +1,4 @@
-package io.allitov.plt.transducer;
+package io.allitov.plt.parsing;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.Objects;
 
 import io.allitov.plt.exception.ConfigurationException;
+import io.allitov.plt.transducer.Transducer;
+import io.allitov.plt.transducer.Transition;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
@@ -36,9 +40,9 @@ public class TransducerParser {
         try {
             return parse(Files.readString(file, StandardCharsets.UTF_8));
         } catch (NoSuchFileException _) {
-            throw new IOException("the transducer file '" + file + "' does not exist");
+            throw new IOException("the transducer file '%s' does not exist".formatted(file));
         } catch (InvalidPathException _) {
-            throw new IOException("invalid transducer file path '" + file + "'");
+            throw new IOException("invalid transducer file path '%s'".formatted(file));
         }
     }
 
@@ -123,23 +127,14 @@ public class TransducerParser {
     }
 
     private void requireField(String value, String name) {
-        if (value == null || value.isBlank()) {
-            throw new ConfigurationException("required field '" + name + "' is missing");
+        if (StringUtils.isBlank(value)) {
+            throw new ConfigurationException("required field '%s' is missing or empty".formatted(name));
         }
     }
 
     private void requireField(List<?> value, String name) {
-        if (value == null || value.isEmpty()) {
-            throw new ConfigurationException("required field '" + name + "' is missing or empty");
+        if (CollectionUtils.isEmpty(value)) {
+            throw new ConfigurationException("required field '%s' is missing or empty".formatted(name));
         }
-    }
-
-    private record RawTransducer(List<String> states, List<String> inputAlphabet, List<String> stackAlphabet,
-                                 List<String> outputAlphabet, String startState, String startStackSymbol,
-                                 List<String> finalStates, List<RawTransition> transitions) {
-    }
-
-    private record RawTransition(String state, String input, String stackTop, String newState,
-                                 String push, String output) {
     }
 }

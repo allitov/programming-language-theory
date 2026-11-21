@@ -6,6 +6,8 @@ logback = "1.5.18"
 assertJ = "3.27.7"
 mockito = "5.24.0"
 jackson = "3.3.0"
+apache-lang = "3.22.0"
+apache-collections = "4.6.0"
 
 [libraries]
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junitBom" }
@@ -16,6 +18,8 @@ log4j-slf4j = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.r
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 mockito = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 jackson = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson" }
+apache-lang = { module = "org.apache.commons:commons-lang3", version.ref ="apache-lang" }
+apache-collections = { module = "org.apache.commons:commons-collections4", version.ref = "apache-collections" }
 
 [plugins]
 lombok = { id = "io.freefair.lombok", version.ref = "lombok" }

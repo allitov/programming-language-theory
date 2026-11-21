@@ -1,6 +1,7 @@
 package io.allitov.plt.transducer;
 
 import io.allitov.plt.exception.TranslationException;
+import io.allitov.plt.parsing.TransducerParser;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

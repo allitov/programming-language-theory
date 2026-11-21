@@ -15,7 +15,7 @@ import io.allitov.plt.transducer.Lexeme;
 import io.allitov.plt.transducer.Lexer;
 import io.allitov.plt.transducer.Step;
 import io.allitov.plt.transducer.Transducer;
-import io.allitov.plt.transducer.TransducerParser;
+import io.allitov.plt.parsing.TransducerParser;
 import io.allitov.plt.transducer.TransducerPrinter;
 import io.allitov.plt.transducer.TransducerRunner;
 import io.allitov.plt.transducer.TranslationResult;
@@ -33,7 +33,7 @@ public class Main {
 
     private static final TransducerRunner RUNNER = new TransducerRunner();
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         try {
             run(args);
         } catch (IOException | ConfigurationException | IllegalArgumentException exception) {
