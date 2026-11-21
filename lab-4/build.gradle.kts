@@ -13,7 +13,7 @@ java {
 }
 
 dependencies {
-    implementation(libs.log4j.slf4j)
+    implementation(libs.logback.classic)
     implementation(libs.jackson)
 
     testImplementation(libs.assertj)
