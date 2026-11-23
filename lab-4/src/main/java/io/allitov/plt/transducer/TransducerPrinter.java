@@ -48,8 +48,8 @@ public class TransducerPrinter {
         return stack.isEmpty() ? Transducer.LAMBDA : String.join("", stack);
     }
 
-    private String formatTape(String output) {
-        return output.isEmpty() ? Transducer.LAMBDA : output;
+    private String formatTape(List<String> output) {
+        return output.isEmpty() ? Transducer.LAMBDA : String.join(" ", output);
     }
 
     private String joinChain(List<String> symbols) {

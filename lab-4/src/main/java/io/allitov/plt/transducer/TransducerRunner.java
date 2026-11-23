@@ -18,7 +18,7 @@ public class TransducerRunner {
             throw new TranslationException("the input chain is empty", 0);
         }
         Configuration initial = new Configuration(transducer.getStartState(), input,
-            List.of(transducer.getStartStackSymbol()), "");
+            List.of(transducer.getStartStackSymbol()), List.of());
         Configuration current = initial;
         List<Step> steps = new ArrayList<>();
         int endPosition = input.getLast().position();
@@ -67,22 +67,23 @@ public class TransducerRunner {
         List<String> stack = new ArrayList<>(transition.push());
         stack.addAll(remainingStack);
         String lexemeText = consumesInput ? current.input().getFirst().text() : null;
-        Configuration next = new Configuration(transition.newState(), remainingInput, stack,
-            current.output() + emit(transition.output(), lexemeText));
+        List<String> output = new ArrayList<>(current.output());
+        output.addAll(emit(transition.output(), lexemeText));
+        Configuration next = new Configuration(transition.newState(), remainingInput, stack, output);
         steps.add(new Step(steps.size() + 1, current, next, transition, consumesInput));
         return next;
     }
 
     /** Builds the emitted chain; the token {@code num} echoes the text of the consumed lexeme. */
-    private static String emit(List<String> outputTokens, String lexemeText) {
+    private static List<String> emit(List<String> outputTokens, String lexemeText) {
         if (outputTokens.isEmpty()) {
-            return "";
+            return List.of();
         }
-        StringBuilder tape = new StringBuilder();
+        List<String> emitted = new ArrayList<>();
         for (String token : outputTokens) {
-            tape.append(Transition.NUM_TOKEN.equals(token) && lexemeText != null ? lexemeText : token);
+            emitted.add(Transition.NUM_TOKEN.equals(token) && lexemeText != null ? lexemeText : token);
         }
-        return tape.toString();
+        return List.copyOf(emitted);
     }
 
     private static Optional<Transition> lookup(Transducer transducer, Configuration current, String input) {

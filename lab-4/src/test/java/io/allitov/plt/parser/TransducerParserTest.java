@@ -27,12 +27,12 @@ class TransducerParserTest {
           "states": ["q0", "qf"],
           "inputAlphabet": ["a", "b"],
           "stackAlphabet": ["Z", "A"],
-          "outputAlphabet": ["x", "num", " "],
+          "outputAlphabet": ["x", "num"],
           "startState": "q0",
           "startStackSymbol": "Z",
           "finalStates": ["qf"],
           "transitions": [
-            { "state": "q0", "input": "a", "stackTop": "Z", "newState": "qf", "push": "AZ", "output": "x num" },
+            { "state": "q0", "input": "a", "stackTop": "Z", "newState": "qf", "push": "AZ", "output": "xnum" },
             { "state": "qf", "input": "λ", "stackTop": "Z", "newState": "qf", "push": "λ", "output": "λ" }
           ]
         }
@@ -44,14 +44,14 @@ class TransducerParserTest {
         assertThat(transducer.getStates()).containsExactly("q0", "qf");
         assertThat(transducer.getInputAlphabet()).containsExactlyInAnyOrder("a", "b");
         assertThat(transducer.getStackAlphabet()).containsExactlyInAnyOrder("Z", "A");
-        assertThat(transducer.getOutputAlphabet()).containsExactlyInAnyOrder("x", "num", " ");
+        assertThat(transducer.getOutputAlphabet()).containsExactlyInAnyOrder("x", "num");
         assertThat(transducer.getStartState()).isEqualTo("q0");
         assertThat(transducer.getStartStackSymbol()).isEqualTo("Z");
         assertThat(transducer.getFinalStates()).containsExactly("qf");
         assertThat(transducer.getTransitions()).hasSize(2);
         Transition push = transducer.transition("q0", "a", "Z").orElseThrow();
         assertThat(push.push()).containsExactly("A", "Z");
-        assertThat(push.output()).containsExactly("x", " ", "num");
+        assertThat(push.output()).containsExactly("x", "num");
         Transition lambda = transducer.transition("qf", "λ", "Z").orElseThrow();
         assertThat(lambda.push()).isEmpty();
         assertThat(lambda.output()).isEmpty();

@@ -88,7 +88,7 @@ public class Main {
                 log.info("tick {}: state '{}' stack '{}' output '{}'", step.number(), step.after().state(),
                     step.after().stack(), step.after().output());
             }
-            String rpn = result.output().strip();
+            String rpn = String.join(" ", result.output());
             console.println("RPN: " + rpn);
             console.println("ACCEPTED: the expression has been translated (final state '"
                 + result.last().state() + "').");

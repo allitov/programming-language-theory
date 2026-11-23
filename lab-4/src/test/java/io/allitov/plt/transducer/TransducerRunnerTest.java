@@ -36,7 +36,7 @@ class TransducerRunnerTest {
     void translatesExpressionsIntoRpn(String input, String expectedRpn) {
         TranslationResult result = translate(input);
         assertThat(result.last().state()).isEqualTo("q8");
-        assertThat(result.output().strip()).isEqualTo(expectedRpn);
+        assertThat(String.join(" ", result.output())).isEqualTo(expectedRpn);
     }
 
     Stream<org.junit.jupiter.params.provider.Arguments> validExpressions() {
@@ -78,7 +78,7 @@ class TransducerRunnerTest {
             "10) (q7, λ, +Z, 5 3 2 *) -> (q7, λ, Z, 5 3 2 * +)",
             "11) (q7, λ, Z, 5 3 2 * +) -> (q8, λ, Z, 5 3 2 * +)"
         );
-        assertThat(result.output().strip()).isEqualTo("5 3 2 * +");
+        assertThat(String.join(" ", result.output())).isEqualTo("5 3 2 * +");
     }
 
     @Test
@@ -92,8 +92,8 @@ class TransducerRunnerTest {
         assertThat(lambdaTicks).containsExactly(3, 6, 9, 10, 11);
         Step finalPop = result.steps().get(9);
         assertThat(finalPop.transition().input()).isEqualTo("λ");
-        assertThat(finalPop.before().output()).isEqualTo("5 3 2 *");
-        assertThat(finalPop.after().output()).isEqualTo("5 3 2 * +");
+        assertThat(finalPop.before().output()).containsExactly("5", "3", "2", "*");
+        assertThat(finalPop.after().output()).containsExactly("5", "3", "2", "*", "+");
     }
 
     @Test
@@ -102,8 +102,8 @@ class TransducerRunnerTest {
         TranslationResult result = translate("8 - 3 - 2");
         Step step = result.steps().get(5);
         assertThat(step.inputConsumed()).isFalse();
-        assertThat(step.before().output()).isEqualTo("8 3");
-        assertThat(step.after().output()).isEqualTo("8 3 -");
+        assertThat(step.before().output()).containsExactly("8", "3");
+        assertThat(step.after().output()).containsExactly("8", "3", "-");
     }
 
     @Test

@@ -81,7 +81,7 @@ public class Transducer {
         }
         Set<String> outputCopy = new LinkedHashSet<>();
         for (String symbol : outputAlphabet) {
-            outputCopy.add(requireOutputSymbol(symbol));
+            outputCopy.add(requirePlainSymbol(symbol, "output alphabet"));
         }
         Set<Transition> transitionCopy = new LinkedHashSet<>();
         for (Transition transition : transitions) {
@@ -139,17 +139,6 @@ public class Transducer {
         }
         if (LAMBDA.equals(symbol) || EPSILON.equals(symbol)) {
             throw new IllegalArgumentException("'" + symbol + "' denotes emptiness and must not be declared as a symbol of the " + where);
-        }
-        return symbol;
-    }
-
-    private static String requireOutputSymbol(String symbol) {
-        Objects.requireNonNull(symbol, "symbol");
-        if (symbol.isEmpty()) {
-            throw new IllegalArgumentException("output alphabet symbols must not be empty");
-        }
-        if (LAMBDA.equals(symbol) || EPSILON.equals(symbol)) {
-            throw new IllegalArgumentException("'" + symbol + "' denotes emptiness and must not be declared as a symbol of the output alphabet");
         }
         return symbol;
     }
