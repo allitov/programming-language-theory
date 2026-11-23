@@ -22,12 +22,6 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Loads a pushdown transducer from its json configuration (Jackson) and maps it into the
- * {@link Transducer} model with full validation: required fields, symbols inside the declared
- * alphabets, determinism (unique {@code (q, a, z)} rules and no λ-rule conflicting with a real-symbol
- * rule for the same pair {@code (q, z)}).
- */
 @UtilityClass
 public class TransducerParser {
 

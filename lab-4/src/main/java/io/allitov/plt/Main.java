@@ -22,11 +22,6 @@ import io.allitov.plt.transducer.TranslationResult;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Console entry point: loads a pushdown transducer from a json file, prints its summary and then
- * translates expression lines read from stdin, printing every tick. An empty line or the
- * {@code exit} command finishes the session; an error while translating one line does not stop it.
- */
 @Slf4j
 @UtilityClass
 public class Main {

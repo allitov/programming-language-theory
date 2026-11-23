@@ -7,14 +7,6 @@ import java.util.Optional;
 
 import io.allitov.plt.exception.TranslationException;
 
-/**
- * The universal tick interpreter of a pushdown transducer: by the current configuration
- * {@code (q, x, α, y)} and a rule from δ it performs the step {@code (q, ax, zγ, y) ⊢ (r, x, αγ, yt)}.
- * Supports transitions by real input symbols as well as λ-transitions (performed without reading a
- * symbol, e.g. the final pops of the stack when the input is exhausted). The transducer is treated
- * as deterministic; whenever no rule fits the current configuration the input is rejected with a
- * {@link TranslationException} carrying the position of the offending lexeme.
- */
 public class TransducerRunner {
 
     public static final int STEP_LIMIT = 10_000;

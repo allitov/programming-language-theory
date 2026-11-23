@@ -12,20 +12,13 @@ import java.util.Set;
 
 import lombok.Value;
 
-/**
- * Immutable description of a pushdown transducer {@code P = (Q, V, Z, V', δ, q0, z0, F)}.
- * States and symbols are string identifiers loaded from a json configuration, not hard-coded enums.
- */
 @Value
 public class Transducer {
 
-    /** Denotes the empty chain (input, stack, output tape). */
     public static final String LAMBDA = "λ";
 
-    /** Alias of the empty chain that must not be declared as a real symbol. */
     public static final String EPSILON = "ε";
 
-    /** The input chain end marker appended by the lexical analyzer. */
     public static final String INPUT_END = "⊥";
 
     Set<String> states;
@@ -135,7 +128,6 @@ public class Transducer {
         this.transitionsByKey = index(transitionCopy);
     }
 
-    /** Returns the rule {@code δ(state, input, stackTop)} if it is defined. */
     public Optional<Transition> transition(String state, String input, String stackTop) {
         return Optional.ofNullable(transitionsByKey.get(new TransitionKey(state, input, stackTop)));
     }
@@ -151,10 +143,6 @@ public class Transducer {
         return symbol;
     }
 
-    /**
-     * Unlike the input and stack alphabets, the output alphabet legitimately contains the space
-     * symbol (it separates lexemes on the output tape), so only empty strings are rejected there.
-     */
     private static String requireOutputSymbol(String symbol) {
         Objects.requireNonNull(symbol, "symbol");
         if (symbol.isEmpty()) {
@@ -166,11 +154,6 @@ public class Transducer {
         return symbol;
     }
 
-    /**
-     * Verifies the determinism requirements: at most one rule per triple {@code (q, a, z)} and a
-     * λ-rule for a pair {@code (q, z)} is allowed only when no rule by a real input symbol exists
-     * for the same pair.
-     */
     private static void requireDeterministic(Set<Transition> transitions) {
         Set<TransitionKey> exact = new HashSet<>();
         Map<TransitionKey, String> lambdaByPair = new HashMap<>();

@@ -7,12 +7,6 @@ import java.util.Objects;
 import io.allitov.plt.exception.TranslationException;
 import lombok.experimental.UtilityClass;
 
-/**
- * Lexical analysis of an input line: digits are grouped into {@code num} lexemes, whitespace acts as
- * a lexeme separator and is skipped, the operation and parenthesis characters become single-symbol
- * lexemes. Finally the input chain end marker {@code ⊥} is appended, so the transducer can detect
- * the end of the input by a real transition instead of guessing it.
- */
 @UtilityClass
 public class Lexer {
 

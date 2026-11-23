@@ -4,11 +4,6 @@ import java.util.List;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * Renders transducer objects in the conventions of the task: a configuration is the quadruple
- * {@code (q, x, α, y)} with the stack written top-first; the empty chain (input, stack, output tape)
- * is denoted λ.
- */
 @UtilityClass
 public class TransducerPrinter {
 
